@@ -1,23 +1,3 @@
-const mergeStream = require('merge-stream');
-const { Readable } = require('stream');
-
-class ReadableString extends Readable {
-  constructor(str) {
-    super();
-    this.str = str;
-    this.sent = false;
-  }
-
-  _read() {
-    if (!this.sent) {
-      this.push(Buffer.from(this.str));
-      this.sent = true;
-    } else {
-      this.push(null);
-    }
-  }
-}
-
 const global = {};
 const renderToStream = async (req, config) => {
   const { serverJs, baseDir, useReactToString } = config;
