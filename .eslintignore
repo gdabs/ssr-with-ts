@@ -1,0 +1,11 @@
+/scripts/*
+.history
+/config/*
+/build/*
+/public/*
+/logs/*
+/run/*
+/env/*
+/dist/*
+*.js
+yarn-error.log

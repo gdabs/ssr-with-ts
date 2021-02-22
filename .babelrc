@@ -1,0 +1,11 @@
+{
+  "presets": [["react-app", { "flow": false, "typescript": true, "useESModules": true }]],
+  "plugins": [
+    ["import", { "libraryName": "antd-mobile", "style": true }, "antd-mobile"],
+    [
+      "import",
+      { "libraryName": "lodash", "libraryDirectory": "", "camel2DashComponentName": false },
+      "lodash"
+    ]
+  ]
+}
