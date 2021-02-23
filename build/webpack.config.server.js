@@ -2,8 +2,8 @@ const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const baseConfig = require('./webpack.config.base');
-const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const paths = require('./paths');
 
 const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 

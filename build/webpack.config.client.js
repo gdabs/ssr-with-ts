@@ -10,9 +10,9 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const baseConfig = require('./webpack.config.base');
-const getClientEnvironment = require('./env');
 
 const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 
@@ -29,9 +29,6 @@ const devtool = isEnvDevelopment
   : shouldUseSourceMap
   ? 'source-map'
   : false;
-
-// Get the path to the uncompiled service worker (if it exists).
-const swSrc = paths.swSrc;
 
 const optimization = {
   minimize: isEnvProduction,

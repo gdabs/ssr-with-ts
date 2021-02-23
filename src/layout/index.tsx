@@ -35,11 +35,13 @@ const Layout: SFC<LayoutProps> = (props: LayoutProps): JSX.Element | null => {
         <body>
           {/* https://github.com/facebook/react/issues/10879 */}
           <div id="app">{commonNode(props)}</div>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.__USE_SSR__=true;window.__INITIAL_DATA__ =${serialize(serverData)}`,
-            }}
-          />
+          {serverData && (
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.__USE_SSR__=true;window.__INITIAL_DATA__ =${serialize(serverData)}`,
+              }}
+            />
+          )}
           <div dangerouslySetInnerHTML={{ __html: injectScript && injectScript.join('') }} />
         </body>
       </html>

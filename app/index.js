@@ -1,5 +1,8 @@
 const path = require('path');
 const http = require('http');
+const logger = require('morgan');
+const request = require('request');
+const qs = require('qs');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const express = require('express');
 const compression = require('compression');
@@ -17,10 +20,13 @@ app.use(compression());
 app.use(express.static(resolvePath('../dist')));
 app.use(cookieParser());
 
-app.use(/(\/static)|(\/sockjs-node)|(\/__webpack_dev_server__)|hot-update/, createProxyMiddleware({
+app.use(logger('dev'));
+
+process.env.NODE_ENV === 'development' && app.use(/(\/static)|(\/sockjs-node)|(\/__webpack_dev_server__)|hot-update/, createProxyMiddleware({
   target: 'http://127.0.0.1:8000',
   changeOrigin: true,
 }));
+
 
 routes.map((item) => {
   app.get(item.path, async(req, res, next) => {
@@ -46,6 +52,10 @@ routes.map((item) => {
     }
     
   })
+});
+
+app.get('/', (req, res) => {
+  res.send('codemao');
 });
 
 const server = http.createServer(app);

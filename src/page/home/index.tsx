@@ -1,5 +1,7 @@
-import React from 'react';
-import { Request } from 'express';
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+import { StoreState } from '@/store';
+import { setLanguage, Language } from '@/store/module/app';
 import './index.less';
 interface MockData {
   [index: string]: string;
@@ -14,14 +16,28 @@ const mockData: MockData = {
 
 interface Props {
   newsDetail: string;
+  setLanguage: (language: Language) => void;
+  language: Language;
 }
 const Home: SFC<Props> = (props: Props) => {
-  return <div className="news-container">{props.newsDetail}</div>;
+  const { newsDetail, language, setLanguage } = props;
+
+  const switchLanguage = useCallback(() => {
+    setLanguage(language === 'zhCN' ? 'en' : 'zhCN');
+  }, [setLanguage, language]);
+  return (
+    <div className="news-container">
+      <div>{newsDetail}</div>
+      <div onClick={switchLanguage}>{language}</div>
+    </div>
+  );
 };
-Home.getInitialProps = (req: Request) => {
+Home.getInitialProps = req => {
   return Promise.resolve({
     newsDetail: mockData[1],
   });
 };
 
-export default Home;
+export default connect(({ app }: StoreState) => ({ language: app.language }), {
+  setLanguage,
+})(Home);

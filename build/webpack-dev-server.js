@@ -6,7 +6,6 @@ const cwd = process.env.BASE_CWD || process.cwd();
 
 const PORT = process.env.FE_PORT || 8000;
 const compiler = webpack(clientConfig);
-// @ts-ignore
 const server = new WebpackDevServer(
   compiler,
   Object.assign(
@@ -27,7 +26,6 @@ const server = new WebpackDevServer(
       sockPort: PORT,
       contentBase: cwd + '/dist',
       hot: true,
-      // @ts-ignore
       port: PORT,
       clientLogLevel: 'warning',
       headers: {
@@ -40,7 +38,6 @@ const server = new WebpackDevServer(
     clientConfig.devServer
   )
 );
-// @ts-ignore
 server.listen(PORT, '0.0.0.0', err => {
   if (err) {
     throw err;

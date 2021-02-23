@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 function getPublicUrlOrPath(isEnvDevelopment, homepage, envPublicUrl) {
+  console.log()
   if (envPublicUrl) {
     // ensure last slash exists
     return envPublicUrl.endsWith('/') ? envPublicUrl : envPublicUrl + '/';
@@ -28,6 +29,7 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 // single-page apps that may serve index.html for nested URLs like /todos/42.
 // We can't use a relative path in HTML because we don't want to load something
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
+
 const publicUrlOrPath = getPublicUrlOrPath(
   process.env.NODE_ENV === 'development',
   require(resolveApp('package.json')).homepage,

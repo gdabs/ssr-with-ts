@@ -52,7 +52,7 @@ function GetInitialProps(WrappedComponent: FC): React.ComponentClass {
         WrappedComponent = (await WrappedComponent.preload()).default;
       }
       const extraProps = WrappedComponent.getInitialProps
-        ? await WrappedComponent.getInitialProps(props)
+        ? await WrappedComponent.getInitialProps(props, window._store)
         : {};
       this.setState({
         extraProps,

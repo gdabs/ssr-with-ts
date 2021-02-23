@@ -29,8 +29,8 @@ interface Preload {
   default: React.FC;
 }
 
-export interface FC extends React.FC {
-  getInitialProps?: (params: any) => Promise<any>;
+export interface FC extends React.FC<any> {
+  getInitialProps?: (params: any, store: any) => Promise<any>;
   Layout?: React.FC<LayoutProps>;
   preload?: () => Promise<Preload>;
 }

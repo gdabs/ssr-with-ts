@@ -6,16 +6,10 @@ const paths = require('./paths');
 delete require.cache[require.resolve('./paths')];
 
 // Passed in during build in docker
-const FRONT_ENV = process.env.front_env || 'local';
-const NODE_ENV = process.env.NODE_ENV;
-if (!NODE_ENV) {
-  throw new Error('The NODE_ENV environment variable is required but was not specified.');
-}
+const FRONT_ENV = process.env.FRONT_ENV || 'local';
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 const dotenvFiles = [
-  // variable for the command (npm run xxx)
-  `${paths.dotenv}.${NODE_ENV}.local`,
   // loaded in during build in docker
   `${paths.dotenv}.${FRONT_ENV}`,
   paths.dotenv,
@@ -54,7 +48,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in webpack configuration.
-const REACT_APP = /^REACT_APP_/i;
+const REACT_APP = /^(REACT_APP_|runtime)/i;
 
 function getClientEnvironment(publicUrl) {
   const raw = Object.keys(process.env)
