@@ -1,4 +1,4 @@
-# Epress + React + SSR 应用骨架
+# Express + React + SSR 应用骨架
 
 # 功能/特性
 
