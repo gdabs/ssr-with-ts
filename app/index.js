@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(logger('dev'));
 
-process.env.NODE_ENV === 'development' && app.use(/(\/static)|(\/sockjs-node)|(\/__webpack_dev_server__)|hot-update/, createProxyMiddleware({
+process.env.NODE_ENV === 'development' && app.use(/(\/static)|(\/sockjs-node)|(\/__webpack_dev_server__)|(.*\.hot-update)/, createProxyMiddleware({
   target: 'http://127.0.0.1:8000',
   changeOrigin: true,
 }));

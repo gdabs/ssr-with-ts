@@ -15,7 +15,7 @@ interface Props {
   newsDetail: string;
 }
 const News: SFC<Props> = (props: Props) => {
-  return <div className="news-container">文章详情: {props.newsDetail}</div>;
+  return <div className="news-container">文章详情1: {props.newsDetail}</div>;
 };
 News.getInitialProps = req => {
   const newsId = __isBrowser__ ? req.match.params.id : req.params.id;
