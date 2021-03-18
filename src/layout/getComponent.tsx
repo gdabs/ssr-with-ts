@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { pathToRegexp } from 'path-to-regexp';
 import { cloneDeepWith } from 'lodash';
 import { matchPath } from 'react-router-dom';
-import { RouteItem, FC, Config } from '@/types/layout.d.ts';
+import { RouteItem, FC, Config } from '@/types/layout.d';
 
 let _this = null;
 let routerChanged = false;
@@ -55,7 +55,7 @@ function GetInitialProps(WrappedComponent: FC): React.ComponentClass {
         ? await WrappedComponent.getInitialProps(props, window._store)
         : {};
       this.setState({
-        extraProps,
+        extraProps: { initialProps: extraProps },
       });
     }
 
@@ -87,6 +87,15 @@ export const getComponent = (Routes: RouteItem[], path: string) => {
   }; // 找不到对应的组件时返回NotFound组件
   const activeComponent = activeRoute.Component;
   return activeComponent;
+};
+
+export const getActiveRoute = (Routes: RouteItem[], path: string) => {
+  // 根据请求的path来匹配到对应的component
+  const activeRoute = Routes.find(route => matchPath(path, route)) || {
+    Component: () => NotFound,
+    noheader: true,
+  }; // 找不到对应的组件时返回NotFound组件
+  return activeRoute;
 };
 
 export const preloadComponent = async (Routes: RouteItem[], config?: Config) => {

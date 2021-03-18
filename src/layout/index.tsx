@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import serialize from 'serialize-javascript';
+import { matchPath } from 'react-router-dom';
+import { LayoutProps } from '@/types/layout.d';
+import Header from '@/components/Header';
 import '@/assets/common.less';
-import { LayoutProps } from '@/types/layout.d.ts';
 
 import './index.less';
 
 // 为了同时兼容ssr/csr请保留此判断，如果你的layout没有内容请使用 props.children ?  props.children  : ''
-const commonNode = (props: LayoutProps) => (props.children ? props.children : null);
+const commonNode = (props: LayoutProps) =>
+  props.children ? (
+    <Fragment>
+      {!props.noheader && <Header />}
+      <div className="layoutContainer" style={{ paddingTop: !props.noheader ? 58 : 0 }}>
+        {props.children}
+      </div>
+    </Fragment>
+  ) : null;
 
 const Layout: SFC<LayoutProps> = (props: LayoutProps): JSX.Element | null => {
   if (__isBrowser__) {
@@ -14,8 +24,9 @@ const Layout: SFC<LayoutProps> = (props: LayoutProps): JSX.Element | null => {
   } else {
     const serverData = props.layoutData;
     const { url } = props;
-    const { injectCss, injectScript } = props.ssrConfig;
-    const chunkName = url ? url.split('/')[1] : '';
+    const { injectCss, injectScript, routes } = props.ssrConfig;
+    const activeRoute = routes.find(route => matchPath(url, route) && route.loadable);
+    const chunkName = activeRoute ? activeRoute.path.split('/')[1] : '';
     return (
       <html lang="en">
         <head>

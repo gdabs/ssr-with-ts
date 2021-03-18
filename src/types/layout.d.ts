@@ -23,6 +23,7 @@ export type LayoutProps = {
   layoutData?: any;
   ssrConfig?: Config;
   url?: string;
+  noheader?: boolean;
   children?: JSX.Element | null;
 };
 interface Preload {
@@ -38,5 +39,7 @@ export interface FC extends React.FC<any> {
 export interface RouteItem {
   path: string;
   exact?: boolean;
+  loadable?: boolean;
+  noheader?: boolean;
   Component: () => FC;
 }

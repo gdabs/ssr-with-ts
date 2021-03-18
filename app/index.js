@@ -1,13 +1,11 @@
 const path = require('path');
 const http = require('http');
 const logger = require('morgan');
-const request = require('request');
-const qs = require('qs');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const express = require('express');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
-const renderToStream = require('./renderToStream')
+const renderToStream = require('./renderToStream');
 
 const resolvePath = (filePath) => path.resolve(__dirname, filePath);
 
@@ -26,7 +24,6 @@ process.env.NODE_ENV === 'development' && app.use(/(\/static)|(\/sockjs-node)|(\
   target: 'http://127.0.0.1:8000',
   changeOrigin: true,
 }));
-
 
 routes.map((item) => {
   app.get(item.path, async(req, res, next) => {
@@ -55,7 +52,7 @@ routes.map((item) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('codemao');
+  res.send('Welcome');
 });
 
 const server = http.createServer(app);

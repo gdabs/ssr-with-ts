@@ -13,6 +13,7 @@ module.exports = {
     {
       path: '/news/:id',
       exact: true,
+      loadable: true,
       Component: () => (__isBrowser__ ? require('react-loadable')({
         loader: () => import(/* webpackChunkName: "news" */ '@/page/news'),
         loading: function Loading () {
@@ -24,6 +25,8 @@ module.exports = {
     {
       path: '/home',
       exact: true,
+      loadable: true,
+      noheader: true,
       Component: () =>
         __isBrowser__
           ? require('react-loadable')({

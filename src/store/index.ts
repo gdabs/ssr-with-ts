@@ -14,18 +14,17 @@ const reducers: Reducer<StoreState, Action<any>> = combineReducers<StoreState>({
 
 const middleware: Middleware[] = [reduxThunk];
 
-if (process.env.NODE_ENV !== 'production') {
+if (__isBrowser__ && process.env.NODE_ENV !== 'production') {
   middleware.push(reduxLogger);
 }
 
-function createMyStore() {
-  const store =
+function createMyStore(defaultState?: StoreState) {
+  const middle =
     __isBrowser__ && window.__REDUX_DEVTOOLS_EXTENSION__
-      ? createStore(
-          reducers,
-          compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__({}))
-        )
-      : createStore(reducers, applyMiddleware(...middleware));
+      ? compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__({}))
+      : applyMiddleware(...middleware);
+  const params = [reducers, defaultState, middle].filter(Boolean);
+  const store = createStore.apply(null, params);
   return store;
 }
 

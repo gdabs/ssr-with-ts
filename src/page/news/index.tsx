@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.less';
 interface MockData {
   [index: string]: string;
@@ -12,12 +12,19 @@ const mockData: MockData = {
 };
 
 interface Props {
-  newsDetail: string;
+  initialProps: {
+    newsDetail: string;
+  };
 }
 const News: SFC<Props> = (props: Props) => {
-  return <div className="news-container">文章详情1: {props.newsDetail}</div>;
+  const { initialProps } = props;
+  console.log(initialProps);
+  useEffect(() => {
+    console.log('14324');
+  }, []);
+  return <div className="news-container">文章详情1: {initialProps && initialProps.newsDetail}</div>;
 };
-News.getInitialProps = req => {
+News.getInitialProps = async (req, store) => {
   const newsId = __isBrowser__ ? req.match.params.id : req.params.id;
   return Promise.resolve({
     newsDetail: mockData[newsId],

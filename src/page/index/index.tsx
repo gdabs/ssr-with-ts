@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import './index.less';
 
 interface Props {
-  news: NewsItem[];
+  initialProps: {
+    news: NewsItem[];
+  };
 }
 interface NewsItem {
   id: string;
@@ -11,16 +13,18 @@ interface NewsItem {
 }
 
 const Page: SFC<Props> = (props: Props): JSX.Element => {
+  const { initialProps } = props;
   return (
     <div className="normal">
       <div className="welcome" />
       <ul className="list">
-        {props.news &&
-          props.news.map((item: NewsItem) => (
+        {initialProps &&
+          initialProps.news &&
+          initialProps.news.map((item: NewsItem) => (
             <li key={item.id}>
-              <div>文章标题: {item.title}</div>
+              <div>文章标题e41324fasfs: {item.title}</div>
               <div className="toDetail">
-                <Link to="home">点击查看详情</Link>
+                <Link to="/news/1">点击查看详情</Link>
               </div>
             </li>
           ))}

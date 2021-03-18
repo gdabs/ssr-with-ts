@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, StaticRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import getWrappedComponent, { getComponent, preloadComponent } from './layout/getComponent';
+import getWrappedComponent, { preloadComponent, getActiveRoute } from './layout/getComponent';
+import { omit } from 'lodash';
 import createMyStore from '@/store';
 import defaultLayout from './layout';
-import { RouteItem, Request, Config } from '@/types/layout.d.ts';
+import { RouteItem, Request, Config } from '@/types/layout.d';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ssrConfig: Config = require('../config/config.ssr');
@@ -15,7 +16,8 @@ const { routes } = ssrConfig;
 const clientRender = async (): Promise<void> => {
   const clientRoutes = await preloadComponent(routes, ssrConfig);
 
-  const store = window._store || createMyStore();
+  const store =
+    window._store || createMyStore(omit(window.__INITIAL_DATA__ || {}, 'initialProps') as any);
   window._store = store;
   // 客户端渲染||hydrate
   ReactDOM[window.__USE_SSR__ ? 'hydrate' : 'render'](
@@ -34,7 +36,7 @@ const clientRender = async (): Promise<void> => {
                   key={item.path}
                   path={item.path}
                   render={() => (
-                    <Layout>
+                    <Layout noheader={item.noheader}>
                       <WrappedComponent />
                     </Layout>
                   )}
@@ -55,14 +57,21 @@ const clientRender = async (): Promise<void> => {
 const serverRender = async (req: Request): Promise<JSX.Element> => {
   const store = createMyStore();
   // 服务端渲染 根据req.path获取请求的具体组件，调用getInitialProps并渲染
-  const ActiveComponent = getComponent(routes, req.path)();
+  const activeRoute = getActiveRoute(routes, req.path);
+  const ActiveComponent = activeRoute.Component();
   const Layout = ActiveComponent.Layout || defaultLayout;
   const getInitialProps = ActiveComponent.getInitialProps;
-  const serverData = ActiveComponent.getInitialProps ? await getInitialProps(req, store) : {};
+  const initialProps = ActiveComponent.getInitialProps ? await getInitialProps(req, store) : {};
+  const serverData = { initialProps, ...store.getState() };
   return (
     <Provider store={store}>
       <StaticRouter location={req.url} context={serverData}>
-        <Layout layoutData={serverData} ssrConfig={ssrConfig} url={req.path}>
+        <Layout
+          layoutData={serverData}
+          ssrConfig={ssrConfig}
+          url={req.path}
+          noheader={activeRoute.noheader}
+        >
           <ActiveComponent {...serverData} />
         </Layout>
       </StaticRouter>
