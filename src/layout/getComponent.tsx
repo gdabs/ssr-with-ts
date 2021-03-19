@@ -49,7 +49,9 @@ function GetInitialProps(WrappedComponent: FC): React.ComponentClass {
       const props = this.props;
       if (WrappedComponent.preload) {
         // react-loadable 情况
-        WrappedComponent = (await WrappedComponent.preload()).default;
+        WrappedComponent.getInitialProps = (
+          await WrappedComponent.preload()
+        ).default?.getInitialProps;
       }
       const extraProps = WrappedComponent.getInitialProps
         ? await WrappedComponent.getInitialProps(props, window._store)

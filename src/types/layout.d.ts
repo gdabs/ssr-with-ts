@@ -26,10 +26,13 @@ export type LayoutProps = {
   noheader?: boolean;
   children?: JSX.Element | null;
 };
-interface Preload {
-  default: React.FC;
-}
 
+interface DefaultComponent extends React.FC<any> {
+  getInitialProps?: (params: any, store: any) => Promise<any>;
+}
+interface Preload {
+  default: DefaultComponent;
+}
 export interface FC extends React.FC<any> {
   getInitialProps?: (params: any, store: any) => Promise<any>;
   Layout?: React.FC<LayoutProps>;
